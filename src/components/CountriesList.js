@@ -1,5 +1,3 @@
-import React from 'react';
-import { Table } from 'react-bootstrap';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
@@ -7,10 +5,14 @@ import {
   FormControl,
   SplitButton,
   Dropdown,
+  Table,
 } from 'react-bootstrap';
 
 const CountriesList = () => {
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
+  //   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [input, setInput] = useState('');
+  const [option, setOption] = useState('');
 
   const baseURL = 'https://restcountries.com/v2/all';
 
@@ -20,27 +22,44 @@ const CountriesList = () => {
     });
   }, []);
 
+  const handleInput = (e) => {
+    setInput(e.target.value);
+  };
+
+  const handleOptions = (e) => {
+    setOption(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(option, input);
+  };
+
   return (
     <>
       {/* Search bar  */}
-      <InputGroup className="mb-3">
-        <FormControl aria-label="Text input with dropdown button" />
-        <SplitButton
-          variant="outline-secondary"
-          title="Ara"
-          id="segmented-button-dropdown-2"
-          alignRight
-        >
-          <Dropdown.Item href="#">Search</Dropdown.Item>
-          <Dropdown.Item href="#">Search By Name</Dropdown.Item>
-        </SplitButton>
-      </InputGroup>
+      <form className="d-flex flex-row " onSubmit={(e) => handleSubmit(e)}>
+        <input
+          type="search"
+          className="form-control w-50"
+          id="search"
+          placeholder="Search"
+          onChange={(e) => handleInput(e)}
+        />
+        <select className="form-select w-25" onChange={(e) => handleOptions(e)}>
+          <option value="commonSearch">Common Search</option>
+          <option value="searchWithCapital">Search With Capital</option>
+        </select>
+        <button type="submit" className="btn btn-secondary">
+          Search
+        </button>
+      </form>
       {/* Table  */}
       <Table className="table table-striped table-hover">
         {/* table titles  */}
         <thead>
           <tr>
-            <th>#</th>
+            <th>Id</th>
             <th>Country Name</th>
             <th>Capital City</th>
             <th>Region</th>
