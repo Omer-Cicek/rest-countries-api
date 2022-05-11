@@ -22,6 +22,7 @@ const CountriesList = () => {
 
   return (
     <>
+      {/* Search bar  */}
       <InputGroup className="mb-3">
         <FormControl aria-label="Text input with dropdown button" />
         <SplitButton
@@ -34,7 +35,9 @@ const CountriesList = () => {
           <Dropdown.Item href="#">Search By Name</Dropdown.Item>
         </SplitButton>
       </InputGroup>
+      {/* Table  */}
       <Table className="table table-striped table-hover">
+        {/* table titles  */}
         <thead>
           <tr>
             <th>#</th>
@@ -44,6 +47,7 @@ const CountriesList = () => {
             <th>Flag</th>
           </tr>
         </thead>
+        {/* table body-displaying countries and infos conditionally */}
         <tbody>
           {posts
             ? posts.map((post, index) => {
