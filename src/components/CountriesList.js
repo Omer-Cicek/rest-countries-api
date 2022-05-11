@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 
 const CountriesList = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [posts, setPosts] = useState(null);
-  const [filteredPosts, setFilteredPosts] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); //for spinner
+  const [posts, setPosts] = useState(null); //stack all data
+  const [filteredPosts, setFilteredPosts] = useState(null); //holds data that user filtered
   const [input, setInput] = useState('');
   const [option, setOption] = useState('');
 
@@ -13,6 +13,7 @@ const CountriesList = () => {
 
   const baseURL = 'https://restcountries.com/v2/all';
 
+  //fetching data with axios and stacking in "posts"
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -35,15 +36,16 @@ const CountriesList = () => {
     setOption(e.target.value);
   };
 
+  //resets all conditional searches
   const resetHandler = () => {
     setFilteredPosts(null);
     setInput('');
     setOption('');
   };
 
+  //search button clicked, searches for capital city or common infos
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(option, input);
 
     if (option === 'searchWithCapital') {
       newArr = posts.filter((post) =>
@@ -54,15 +56,18 @@ const CountriesList = () => {
     } else {
       newArr = posts.filter((post) => {
         let { name, capital, region } = post;
+
         return (
           name?.toLowerCase().includes(input.toLowerCase()) ||
           capital?.toLowerCase().includes(input.toLowerCase()) ||
           region?.toLowerCase().includes(input.toLowerCase())
         );
       });
-      console.log(newArr);
       setFilteredPosts(newArr);
     }
+
+    setInput('');
+    setOption('');
   };
 
   return (
@@ -73,19 +78,26 @@ const CountriesList = () => {
         onSubmit={(e) => handleSubmit(e)}
       >
         <div className="d-flex justify-content-center w-75 gap-2">
-          <input
+          <input //input bar that user search
             type="search"
             className="form-control w-50"
             id="search"
             placeholder="Search"
-            onChange={(e) => handleInput(e)}
+            onChange={(e) => {
+              handleInput(e);
+            }}
+            value={input}
           />
-          <select
+
+          <select // dropdown menu (Capital City or Common Search)
             className="form-select w-25"
-            onChange={(e) => handleOptions(e)}
+            onChange={(e) => {
+              handleOptions(e);
+            }}
+            value={option}
           >
             <option value="commonSearch">Common Search</option>
-            <option value="searchWithCapital">Search With Capital</option>
+            <option value="searchWithCapital">Search With Capital City</option>
           </select>
 
           <button type="submit" className="btn btn-secondary">
@@ -132,26 +144,26 @@ const CountriesList = () => {
                   );
                 })
               ) : (
-                <p>Veri Bulunamadı</p>
+                <tr>
+                  <td colSpan={5}>Veri Bulunamadı</td>
+                </tr>
               )
             ) : (
-              posts.map((post, index) => {
-                return (
-                  <tr key={post.numericCode}>
-                    <td>{index + 1}</td>
-                    <td>{post?.name}</td>
-                    <td>{post?.capital}</td>
-                    <td>{post?.region}</td>
-                    <td>
-                      <img
-                        src={post?.flags.svg}
-                        alt="countryFlags"
-                        style={{ width: '50px' }}
-                      />
-                    </td>
-                  </tr>
-                );
-              })
+              posts.map((post, index) => (
+                <tr key={post.numericCode}>
+                  <td>{index + 1}</td>
+                  <td>{post?.name}</td>
+                  <td>{post?.capital}</td>
+                  <td>{post?.region}</td>
+                  <td>
+                    <img
+                      src={post?.flags.svg}
+                      alt="countryFlags"
+                      style={{ width: '50px' }}
+                    />
+                  </td>
+                </tr>
+              ))
             ))}
         </tbody>
       </Table>
