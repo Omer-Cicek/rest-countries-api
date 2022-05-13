@@ -61,7 +61,7 @@ const CountriesList = () => {
             .toString()
             .toLowerCase()
             .includes(input.toString().toLowerCase()) === true &&
-          newArr.unshift(post)
+          newArr.push(post)
       );
       setFilteredPosts(newArr);
     }
