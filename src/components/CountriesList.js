@@ -49,7 +49,9 @@ const CountriesList = () => {
 
     if (option === 'searchWithCapital') {
       newArr = posts.filter((post) =>
-        post?.capital?.toLowerCase().includes(input.toLowerCase())
+        post?.capital
+          ?.toLocaleLowerCase('tr')
+          .includes(input.toLocaleLowerCase('tr'))
       );
       setFilteredPosts(newArr);
     } else {
@@ -59,8 +61,8 @@ const CountriesList = () => {
             .flat(1)
             .flatMap((i) => (typeof i === 'object' ? Object.values(i) : i))
             .toString()
-            .toLowerCase()
-            .includes(input.toString().toLowerCase()) === true &&
+            .toLocaleLowerCase('tr')
+            .includes(input.toString().toLocaleLowerCase('tr')) === true &&
           newArr.push(post)
       );
       setFilteredPosts(newArr);
