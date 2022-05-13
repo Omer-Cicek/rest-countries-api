@@ -53,15 +53,16 @@ const CountriesList = () => {
       );
       setFilteredPosts(newArr);
     } else {
-      newArr = posts.filter((post) => {
-        let { name, capital, region } = post;
-
-        return (
-          name?.toLowerCase().includes(input.toLowerCase()) ||
-          capital?.toLowerCase().includes(input.toLowerCase()) ||
-          region?.toLowerCase().includes(input.toLowerCase())
-        );
-      });
+      posts.flat(2).map(
+        (post) =>
+          Object.values(post)
+            .flat(1)
+            .flatMap((i) => (typeof i === 'object' ? Object.values(i) : i))
+            .toString()
+            .toLowerCase()
+            .includes(input.toString().toLowerCase()) === true &&
+          newArr.unshift(post)
+      );
       setFilteredPosts(newArr);
     }
 
@@ -127,14 +128,14 @@ const CountriesList = () => {
               filteredPosts.length > 0 ? (
                 filteredPosts.map((post, index) => {
                   return (
-                    <tr key={post.numericCode}>
+                    <tr key={post?.numericCode}>
                       <td>{index + 1}</td>
                       <td>{post?.name}</td>
                       <td>{post?.capital}</td>
                       <td>{post?.region}</td>
                       <td>
                         <img
-                          src={post?.flags.svg}
+                          src={post?.flags?.svg}
                           alt="countryFlags"
                           style={{ width: '50px' }}
                         />
